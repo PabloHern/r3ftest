@@ -7,15 +7,26 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/minecraft-grass-block-84938a8f3f8d4a0aa64aaa9c4e4d27d3
 Title: Minecraft Grass Block
 */
-
-import React, { useRef } from 'react'
+import * as THREE from 'three'
+import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export function Block(props) {
   const { nodes, materials } = useGLTF('/models/minecraft/scene-transformed.glb')
+  const [active, setActive] = useState(false)
+  const toggle = () => {
+    setActive((!active))
+  }
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.Object_2.geometry} material={materials.Grass_Block_TEX} rotation={[-Math.PI / 2, 0, 0]} />
+      <mesh geometry={nodes.Object_2.geometry} onClick={toggle} material={active ? materials.Grass_Block_TEX : new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        linewidth: 1,
+        transparent: true,
+        opacity: 0.5,
+        linecap: 'round',
+        linejoin: 'round'
+      })} rotation={[-Math.PI / 2, 0, 0]} />
     </group>
   )
 }

@@ -1,0 +1,15 @@
+.title {
+  font-family: "Inter", sans-serif;
+  color: black;
+  z-index: 2;
+}
+
+.title-container {
+  padding: 0.8rem;
+  border-radius: 8px;
+  background-color: #e4dede;
+  z-index: 1;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
