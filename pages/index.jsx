@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
 import { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import Experience from '@/components/Experience';
@@ -9,12 +10,12 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
 
   const download = () => {
-    const exporter = new GLTFExporter();
+    const exporter = new USDZExporter();
     console.log(group)
     exporter.parse(
       group.current,
       function (result) {
-        saveArrayBuffer(result, "blocks.glb");
+        saveArrayBuffer(result, "blocks.usdz");
       },
       // called when there is an error in the generation
       function (error) {

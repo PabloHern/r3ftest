@@ -19,7 +19,7 @@ export function Block(props) {
   }
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.Object_2.geometry} onClick={toggle} material={active ? materials.Grass_Block_TEX : new THREE.LineBasicMaterial({
+      <mesh geometry={nodes.Object_2.geometry} onClick={toggle} material={active ? materials.Grass_Block_TEX : new THREE.MeshStandardMaterial({
         color: 0xffffff,
         linewidth: 1,
         transparent: true,
