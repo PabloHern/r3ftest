@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import * as THREE from 'three'
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
 import { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
@@ -9,13 +10,12 @@ import Experience from '@/components/Experience';
 const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
 
-  const download = () => {
-    const exporter = new USDZExporter();
-    console.log(group)
+  const downloadNormal = () => {
+    const exporter = new GLTFExporter();
     exporter.parse(
       group.current,
       function (result) {
-        saveArrayBuffer(result, "blocks.usdz");
+        saveArrayBuffer(result, "blocks.glb");
       },
       // called when there is an error in the generation
       function (error) {
@@ -25,6 +25,25 @@ export default function Home() {
       },
       { binary: true }
     );
+  }
+  const downloadApple = async () => {
+    let groupClone = group.current.clone()
+    groupClone.traverse((node) => {
+      if (node.material !== undefined) {
+        node.material.side = THREE.FrontSide
+      }
+    });
+    const exporter = new USDZExporter();
+    const arraybuffer = await exporter.parse(groupClone);
+    const blob = new Blob([arraybuffer], { type: 'application/octet-stream' });
+
+    const link = document.createElement("a");
+    link.style.display = "none";
+    document.body.appendChild(link); // Firefox workaround, see #6594
+    link.href = URL.createObjectURL(blob);
+    link.download = "blocks.usdz";
+    link.click();
+
   }
 
   function saveArrayBuffer(buffer, filename) {
@@ -52,7 +71,8 @@ export default function Home() {
       <div className="App">
         <div className='title-container'>
           <h1 className='title'>Create your configuration</h1>
-          <button onClick={() => download()}>Export scene</button>
+          <button onClick={() => downloadNormal()}>Export scene</button>
+          <button onClick={() => downloadApple()}>Export scene usdz</button>
         </div>
         <Canvas dpr={[1, 2]} >
           <color attach="background" args={["#fffff"]} />

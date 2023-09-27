@@ -2,6 +2,9 @@ import { MeshReflectorMaterial, PresentationControls, Stage, } from "@react-thre
 import { useThree } from '@react-three/fiber'
 import { Block } from "./Block";
 import { Html } from "@react-three/drei";
+import { Clickbox } from "./Clickbox";
+import { OrbitControls } from '@react-three/drei';
+
 const cubeMatrix = [
   [-3, 12, -3],
   [0, 12, -3],
@@ -14,14 +17,13 @@ const cubeMatrix = [
   [3, 6, -3]
 ]
 const Experience = ({ group }) => {
-  const { gl, scene, camera } = useThree();
 
 
   return (
     <>
       <PresentationControls
         speed={1.5}
-        global
+        global={false}
         polar={[-1, Math.PI / 4]}
         rotation={[Math.PI / 16, 0, 0]}
       >
@@ -29,7 +31,7 @@ const Experience = ({ group }) => {
           <group ref={group}>
             {cubeMatrix.map((cubePos) => {
               return (
-                < Block position={cubePos} ></Block>
+                < Clickbox position={cubePos} ></Clickbox>
               )
             })}
           </group>
