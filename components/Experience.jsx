@@ -1,42 +1,33 @@
-import { MeshReflectorMaterial, PresentationControls, Stage, } from "@react-three/drei";
+import { MeshReflectorMaterial, OrbitControls, Environment, } from "@react-three/drei";
 import { useThree } from '@react-three/fiber'
 import { Block } from "./Block";
 import { Html } from "@react-three/drei";
 import { Clickbox } from "./Clickbox";
-import { OrbitControls } from '@react-three/drei';
-
+import { useRef } from "react";
 const cubeMatrix = [
-  [-3, 12, -3],
-  [0, 12, -3],
-  [3, 12, -3],
-  [-3, 9, -3],
-  [0, 9, -3],
-  [3, 9, -3],
-  [-3, 6, -3],
-  [0, 6, -3],
-  [3, 6, -3]
+  [-3, 3, - 3],
+  [0, 3, - 3],
+  [3, 3, - 3],
+  [-3, 0, -3],
+  [0, 0, -3],
+  [3, 0, -3],
+  [-3, -3, -3],
+  [0, -3, -3],
+  [3, -3, -3]
 ]
 const Experience = ({ group }) => {
-
-
+  const controls = useRef()
   return (
     <>
-      <PresentationControls
-        speed={1.5}
-        global={false}
-        polar={[-1, Math.PI / 4]}
-        rotation={[Math.PI / 16, 0, 0]}
-      >
-        <Stage  >
-          <group ref={group}>
-            {cubeMatrix.map((cubePos) => {
-              return (
-                < Clickbox position={cubePos} ></Clickbox>
-              )
-            })}
-          </group>
-        </Stage>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position-x={-6} position-y={-6}>
+      <OrbitControls ref={controls} minPolarAngle={Math.PI / 2} zoom={false} maxPolarAngle={Math.PI / 2} />
+      <group ref={group} position={[0, 0, 0]}>
+        {cubeMatrix.map((cubePos) => {
+          return (
+            < Clickbox controls={controls} position={cubePos} ></Clickbox>
+          )
+        })}
+      </group>
+      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position-x={-6} position-y={-6}>
           <planeGeometry args={[170, 170]} />
           <MeshReflectorMaterial
             blur={[300, 100]}
@@ -50,8 +41,7 @@ const Experience = ({ group }) => {
             color="#101010"
             metalness={0.5}
           />
-        </mesh>
-      </PresentationControls >
+        </mesh> */}
     </>
   );
 };

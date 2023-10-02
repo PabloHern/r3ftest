@@ -13,3 +13,82 @@
   top: 1rem;
   left: 1rem;
 }
+
+.rotateButtonContainer {
+  display: flex;
+  gap: 10rem;
+  justify-content: space-between;
+}
+
+.rotButton {
+  background: rgb(203, 203, 203);
+  border: none;
+  padding: 0.2rem;
+  width: 3rem;
+  border-radius: 46px;
+  cursor: pointer;
+  color: white;
+}
+
+.colorControls {
+  font-family: "Inter", sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: rgb(203, 203, 203);
+  border-radius: 22px;
+  gap: 1rem;
+  color: white;
+}
+
+.colorContainer {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 0.6rem
+}
+
+.color-1 {
+  height: 2.5rem;
+  border: 0.01rem;
+  border-radius: 8px;
+
+  background-color: white;
+}
+
+.color-2 {
+  height: 2.5rem;
+  border: 0.01rem;
+  border-radius: 8px;
+
+  background-color: red;
+}
+
+.color-3 {
+  height: 2.5rem;
+  border: 0.01rem;
+  border-radius: 8px;
+
+  background-color: green;
+}
+
+.annotation {
+  transform: translate3d(calc(50%), calc(-50%), 0);
+  text-align: left;
+  background: #181c20;
+  color: #8c92a4;
+  padding: 10px 15px;
+  border-radius: 5px;
+  user-select: none;
+  font-family: var(--leva-fonts-mono);
+}
+
+.annotation::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -30px;
+  height: 2px;
+  width: 30px;
+  background: #181c20;
+}
