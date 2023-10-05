@@ -28,6 +28,18 @@
   border-radius: 46px;
   cursor: pointer;
   color: white;
+  z-index: -1;
+}
+
+.addButton {
+  background: rgb(203, 203, 203);
+  border: none;
+  padding: 0.2rem;
+  width: 3rem;
+  border-radius: 46px;
+  cursor: pointer;
+  color: white;
+  z-index: 1;
 }
 
 .colorControls {

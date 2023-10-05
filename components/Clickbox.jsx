@@ -50,7 +50,7 @@ export function Clickbox(props) {
           <meshStandardMaterial color={color} />
         </threeMotion.mesh>
       </group>
-      {active && <BoxUI clickBox={clickBox.current} startRotation={startRotation} setColor={setColor}></BoxUI>}
+      {active && <BoxUI cubes={props.cubes} setCubes={props.setCubes} clickBox={clickBox.current} startRotation={startRotation} setColor={setColor}></BoxUI>}
     </>
   )
 }

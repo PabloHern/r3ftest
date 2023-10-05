@@ -1,8 +1,36 @@
 import { Html } from '@react-three/drei'
 import { motion } from "framer-motion"
-import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineArrowLeft, AiFillPlusCircle } from "react-icons/ai";
 
-export default function BoxUI({ clickBox, startRotation, setColor }) {
+export default function BoxUI({ clickBox, startRotation, setColor, cubes, setCubes }) {
+  const buttons = [
+    { x: 0, y: 1.5, z: 0 },
+    { x: 1.5, y: 0, z: 0 },
+    { x: 0, y: -1.5, z: 0 },
+    { x: -1.5, y: 0, z: 0 }
+  ]
+  const createCube = (index) => {
+    if (index == 0) {
+      const newCubes = [...cubes, [clickBox.position.x, clickBox.position.y + 3, clickBox.position.z]]
+      setCubes(newCubes)
+      console.log(cubes)
+    }
+    if (index == 1) {
+      const newCubes = [...cubes, [clickBox.position.x + 3, clickBox.position.y, clickBox.position.z]]
+      setCubes(newCubes)
+      console.log(cubes)
+    }
+    if (index == 2) {
+      const newCubes = [...cubes, [clickBox.position.x, clickBox.position.y - 3, clickBox.position.z]]
+      setCubes(newCubes)
+      console.log(cubes)
+    }
+    if (index == 3) {
+      const newCubes = [...cubes, [clickBox.position.x - 3, clickBox.position.y, clickBox.position.z]]
+      setCubes(newCubes)
+      console.log(cubes)
+    }
+  }
   return (
     <>
       <Html center position={[clickBox.position.x, clickBox.position.y - 1.5, clickBox.position.z]} >
@@ -21,7 +49,19 @@ export default function BoxUI({ clickBox, startRotation, setColor }) {
           </motion.div>
         </div>
       </Html>
-      <Html center position={[clickBox.position.x - 2, clickBox.position.y, clickBox.position.z]}>
+      {buttons.map((button, index) => {
+        return (<Html center position={[clickBox.position.x + button.x, clickBox.position.y + button.y, clickBox.position.z]} >
+          <div className='rotateButtonContainer'>
+            <motion.div whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }} >
+              <button className='addButton' onClick={() => createCube(index)}>
+                <AiFillPlusCircle />
+              </button>
+            </motion.div>
+          </div>
+        </Html>)
+      })}
+      <Html center position={[clickBox.position.x - 2.5, clickBox.position.y, clickBox.position.z]}>
         <motion.div className='colorControls' whileHover={{ scale: 1.1 }}>
           <h2>Color</h2>
           <div className='colorContainer'>

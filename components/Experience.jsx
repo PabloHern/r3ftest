@@ -3,27 +3,20 @@ import { useThree } from '@react-three/fiber'
 import { Block } from "./Block";
 import { Html } from "@react-three/drei";
 import { Clickbox } from "./Clickbox";
-import { useRef } from "react";
-const cubeMatrix = [
-  [-3, 3, - 3],
-  [0, 3, - 3],
-  [3, 3, - 3],
-  [-3, 0, -3],
-  [0, 0, -3],
-  [3, 0, -3],
-  [-3, -3, -3],
-  [0, -3, -3],
-  [3, -3, -3]
-]
+import { useRef, useState } from "react";
 const Experience = ({ group }) => {
+  const [cubes, setCubes] = useState([
+    [0, 0, -3],
+
+  ])
   const controls = useRef()
   return (
     <>
       <OrbitControls ref={controls} minPolarAngle={Math.PI / 2} zoom={false} maxPolarAngle={Math.PI / 2} />
       <group ref={group} position={[0, 0, 0]}>
-        {cubeMatrix.map((cubePos) => {
+        {cubes.map((cubePos) => {
           return (
-            < Clickbox controls={controls} position={cubePos} ></Clickbox>
+            < Clickbox cubes={cubes} setCubes={setCubes} controls={controls} position={cubePos} ></Clickbox>
           )
         })}
       </group>
