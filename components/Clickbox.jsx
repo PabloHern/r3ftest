@@ -10,6 +10,8 @@ import { motion as threeMotion } from "framer-motion-3d"
 import { useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import BoxUI from './BoxUI'
+import { useContext } from 'react'
+import CubeContext from '@/context/CubeContext'
 export function Clickbox(props) {
   const { nodes, materials } = useGLTF('models/clickbox/clickbox001blend-transformed.glb')
   const [active, setActive] = useState(false)
@@ -24,6 +26,7 @@ export function Clickbox(props) {
   }
   useEffect(() => {
     setInitialCamera(camera.position)
+    startRotation(-1)
     console.log(camera.position)
   }, [])
   const startRotation = (dir) => {

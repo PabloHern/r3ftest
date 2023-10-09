@@ -3,20 +3,28 @@ import { useThree } from '@react-three/fiber'
 import { Block } from "./Block";
 import { Html } from "@react-three/drei";
 import { Clickbox } from "./Clickbox";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import CubeContext from "@/context/CubeContext";
 const Experience = ({ group }) => {
+  const { cubess, addCube } = useContext(CubeContext)
   const [cubes, setCubes] = useState([
     [0, 0, -3],
-
   ])
   const controls = useRef()
+  // useEffect(() => {
+  //   const newCube = (
+  //     < Clickbox position={[0, 0, -3]} ></Clickbox>
+  //   )
+  //   addCube(newCube)
+  //   console.log(cubess)
+  // }, [])
   return (
     <>
       <OrbitControls ref={controls} minPolarAngle={Math.PI / 2} zoom={false} maxPolarAngle={Math.PI / 2} />
       <group ref={group} position={[0, 0, 0]}>
-        {cubes.map((cubePos) => {
+        {cubess.map((cubePos, index) => {
           return (
-            < Clickbox cubes={cubes} setCubes={setCubes} controls={controls} position={cubePos} ></Clickbox>
+            cubess[index]
           )
         })}
       </group>

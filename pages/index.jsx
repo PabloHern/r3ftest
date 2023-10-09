@@ -5,12 +5,14 @@ import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import * as THREE from 'three'
 import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
-import { useRef } from "react";
+import { useRef, useContext } from "react";
+import CubeContext from '@/context/CubeContext';
 import { Canvas } from "@react-three/fiber";
+import { Clickbox } from '@/components/Clickbox';
 import Experience from '@/components/Experience';
 const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
-
+  const { addCube, cubes } = useContext(CubeContext)
   const downloadNormal = () => {
     const exporter = new GLTFExporter();
     exporter.parse(
@@ -58,7 +60,11 @@ export default function Home() {
     link.download = filename;
     link.click();
   }
-
+  const addTest = () => {
+    const newCube = [0, 3, -3]
+    addCube(newCube)
+    console.log(cubes)
+  }
   const group = useRef()
 
   return (
@@ -72,8 +78,10 @@ export default function Home() {
       <div className="App">
         <div className='title-container'>
           <h1 className='title'>Create your configuration</h1>
+          <h3 className='title'>Max number of cubes: 5</h3>
           <button onClick={() => downloadNormal()}>Export scene</button>
           <button onClick={() => downloadApple()}>Export scene usdz</button>
+          <button onClick={() => addTest()}>TEST</button>
         </div>
         <Canvas shadows camera={{ position: [0, 3, 10], fov: 45 }} >
           <ambientLight intensity={0.7} />
