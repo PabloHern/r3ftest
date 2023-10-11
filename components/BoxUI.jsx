@@ -1,7 +1,7 @@
 import { Html } from '@react-three/drei'
 import { motion } from "framer-motion"
 import { AiOutlineArrowRight, AiOutlineArrowLeft, AiFillPlusCircle } from "react-icons/ai";
-
+import { useEffect } from 'react';
 export default function BoxUI({ clickBox, startRotation, setColor, cubes, setCubes }) {
   const buttons = [
     { x: 0, y: 1.5, z: 0 },
@@ -31,6 +31,9 @@ export default function BoxUI({ clickBox, startRotation, setColor, cubes, setCub
       console.log(cubes)
     }
   }
+  useEffect(() => {
+    console.log("holi")
+  }, [])
   return (
     <>
       <Html center position={[clickBox.position.x, clickBox.position.y - 1.5, clickBox.position.z]} >

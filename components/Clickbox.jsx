@@ -20,14 +20,10 @@ export function Clickbox(props) {
   const [initialCamera, setInitialCamera] = useState(camera.position)
   const clickBox = useRef()
   const [rotationAngle, setRotationAngle] = useState(0);
-  function toggle(e) {
-    e.stopPropagation()
-    setActive(!active)
-  }
+
   useEffect(() => {
     setInitialCamera(camera.position)
     startRotation(-1)
-    console.log(camera.position)
   }, [])
   const startRotation = (dir) => {
     setRotationAngle((prevAngle) => prevAngle + (Math.PI / 2) * dir);
@@ -41,19 +37,18 @@ export function Clickbox(props) {
     // }
 
     if (clickBox.current.rotation.y !== rotationAngle) {
-      clickBox.current.rotation.y += (rotationAngle - clickBox.current.rotation.y) * 0.05; // Smoothly rotate to the desired angle
+      clickBox.current.rotation.y += (rotationAngle - clickBox.current.rotation.y) * 0.1; // Smoothly rotate to the desired angle
     }
   });
   return (
     <>
       <group {...props} dispose={null} ref={clickBox}>
-        {console.log(materials)}
-        <threeMotion.mesh receiveShadow castShadow whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }} onClick={(e) => toggle(e)} geometry={nodes.Cube.geometry} material={materials.Material} color={color} >
-          <meshStandardMaterial color={color} />
+        <threeMotion.mesh name={props.name} whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }} geometry={nodes.Cube.geometry} material={materials.Material} metalness={0.5} roughness={0.5} envMapIntensity={4}
+          toneMapped={false} fog={false} >
+          <meshStandardMaterial emissive={color} color={color} />
         </threeMotion.mesh>
       </group>
-      {active && <BoxUI cubes={props.cubes} setCubes={props.setCubes} clickBox={clickBox.current} startRotation={startRotation} setColor={setColor}></BoxUI>}
     </>
   )
 }

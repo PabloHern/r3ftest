@@ -1,48 +1,55 @@
-import { MeshReflectorMaterial, OrbitControls, Environment, } from "@react-three/drei";
-import { useThree } from '@react-three/fiber'
-import { Block } from "./Block";
-import { Html } from "@react-three/drei";
+import { useThree, useFrame } from '@react-three/fiber'
 import { Clickbox } from "./Clickbox";
+import { easing } from 'maath'
+import * as THREE from 'three'
+import BoxUI from './BoxUI';
 import { useRef, useState, useEffect, useContext } from "react";
-import CubeContext from "@/context/CubeContext";
-const Experience = ({ group }) => {
-  const { cubess, addCube } = useContext(CubeContext)
-  const [cubes, setCubes] = useState([
-    [0, 0, -3],
-  ])
-  const controls = useRef()
-  // useEffect(() => {
-  //   const newCube = (
-  //     < Clickbox position={[0, 0, -3]} ></Clickbox>
-  //   )
-  //   addCube(newCube)
-  //   console.log(cubess)
-  // }, [])
+const Experience = ({ groupRef, q = new THREE.Quaternion(), p = new THREE.Vector3() }) => {
+  const [cubes, setCubes] = useState([[0, 0, -3], [3, 0, -3]])
+  // const [active, setActive] = useState(false)
+  const clicked = useRef()
+  const active = useRef()
+  const handleActive = (e, index) => {
+    clicked.current = groupRef.current.getObjectByName(index)
+    console.log(clicked.current)
+
+    if (clicked.current) {
+      active.current = true
+      clicked.current.parent.updateWorldMatrix(true, true)
+      clicked.current.parent.localToWorld(p.set(clicked.current.position.x, clicked.current.position.y, 1.85))
+      clicked.current.parent.getWorldQuaternion(q)
+      return
+    } else {
+      active.current = false
+      p.set(0, 0, 5.5)
+      q.identity()
+    }
+  }
+  useEffect(() => {
+    p.set(0, 0, 5.5)
+    q.identity()
+  }, [])
+
+
+  useFrame((state, dt) => {
+    console.log(active.current)
+    easing.damp3(state.camera.position, p, 0.4, dt)
+    easing.dampQ(state.camera.quaternion, q, 0.4, dt)
+  })
   return (
     <>
-      <OrbitControls ref={controls} minPolarAngle={Math.PI / 2} zoom={false} maxPolarAngle={Math.PI / 2} />
-      <group ref={group} position={[0, 0, 0]}>
-        {cubess.map((cubePos, index) => {
+      {/* <OrbitControls ref={controls} minPolarAngle={Math.PI / 2} zoom={false} maxPolarAngle={Math.PI / 2} /> */}
+      <group ref={groupRef} position={[0, 0, 0]}>
+        {cubes.map((cubePos, index) => {
           return (
-            cubess[index]
+            < Clickbox name={index} cubes={cubes} setCubes={setCubes}
+              position={cubePos} onClick={(e) => (e.stopPropagation(), handleActive(e, index))}
+              onPointerMissed={(e) => (e.stopPropagation(), handleActive(e, null))} ></Clickbox>
           )
         })}
       </group>
-      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position-x={-6} position-y={-6}>
-          <planeGeometry args={[170, 170]} />
-          <MeshReflectorMaterial
-            blur={[300, 100]}
-            resolution={1024}
-            mixBlur={1}
-            mixStrength={40}
-            roughness={1}
-            depthScale={1.2}
-            minDepthThreshold={0.4}
-            maxDepthThreshold={1.4}
-            color="#101010"
-            metalness={0.5}
-          />
-        </mesh> */}
+      {active.current ? <BoxUI cubes={cubes} setCubes={setCubes} clickBox={clicked.current} ></BoxUI> : ""}
+
     </>
   );
 };

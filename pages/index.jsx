@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import * as THREE from 'three'
-import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
+import { ContactShadows, Environment, OrbitControls, MeshReflectorMaterial } from "@react-three/drei"
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
 import { useRef, useContext } from "react";
 import CubeContext from '@/context/CubeContext';
@@ -16,7 +16,7 @@ export default function Home() {
   const downloadNormal = () => {
     const exporter = new GLTFExporter();
     exporter.parse(
-      group.current,
+      groupRef.current,
       function (result) {
         saveArrayBuffer(result, "blocks.glb");
       },
@@ -30,7 +30,7 @@ export default function Home() {
     );
   }
   const downloadApple = async () => {
-    let groupClone = group.current.clone()
+    let groupClone = groupRef.current.clone()
     groupClone.traverse((node) => {
       if (node.material !== undefined) {
         node.material.side = THREE.FrontSide
@@ -65,7 +65,7 @@ export default function Home() {
     addCube(newCube)
     console.log(cubes)
   }
-  const group = useRef()
+  const groupRef = useRef()
 
   return (
     <>
@@ -83,12 +83,29 @@ export default function Home() {
           <button onClick={() => downloadApple()}>Export scene usdz</button>
           <button onClick={() => addTest()}>TEST</button>
         </div>
-        <Canvas shadows camera={{ position: [0, 3, 10], fov: 45 }} >
-          <ambientLight intensity={0.7} />
-          <spotLight intensity={0.5} angle={0.1} penumbra={1} position={[10, 15, 10]} castShadow />
-          <Environment preset="city" />
-          <ContactShadows position={[0, -0.8, 0]} opacity={0.25} scale={10} blur={1.5} far={0.8} />
-          <Experience group={group}></Experience>
+        <Canvas dpr={[1, 1.5]} camera={{ fov: 60, position: [0, 2, 15] }} >
+          <color attach="background" args={['#191920']} />
+          <fog attach="fog" args={['#191920', 0, 15]} />
+          <group position={[0, -1.5, 0]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[50, 50]} />
+              <ambientLight intensity={0.7} />
+              <spotLight intensity={2.5} angle={2.1} penumbra={1} position={[10, 15, 10]} castShadow />
+              <MeshReflectorMaterial
+                blur={[300, 100]}
+                resolution={2048}
+                mixBlur={1}
+                mixStrength={80}
+                roughness={1}
+                depthScale={1.8}
+                minDepthThreshold={0.4}
+                maxDepthThreshold={1.4}
+                color="#050505"
+                metalness={0.2}
+              />
+            </mesh>
+          </group>
+          <Experience groupRef={groupRef}></Experience>
         </Canvas>
       </div>
     </>
