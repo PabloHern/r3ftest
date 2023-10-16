@@ -4,37 +4,38 @@ import { easing } from 'maath'
 import * as THREE from 'three'
 import BoxUI from './BoxUI';
 import { useRef, useState, useEffect, useContext } from "react";
-const Experience = ({ groupRef, q = new THREE.Quaternion(), p = new THREE.Vector3() }) => {
+const Experience = ({ groupRef, }) => {
   const [cubes, setCubes] = useState([[0, 0, -3], [3, 0, -3]])
   // const [active, setActive] = useState(false)
   const clicked = useRef()
-  const active = useRef()
+  const [active, setActive] = useState(false)
+  const p = useRef()
   const handleActive = (e, index) => {
     clicked.current = groupRef.current.getObjectByName(index)
     console.log(clicked.current)
 
-    if (clicked.current) {
-      active.current = true
+    if (clicked.current !== undefined) {
+      setActive(true)
       clicked.current.parent.updateWorldMatrix(true, true)
-      clicked.current.parent.localToWorld(p.set(clicked.current.position.x, clicked.current.position.y, 1.85))
-      clicked.current.parent.getWorldQuaternion(q)
-      return
+      clicked.current.parent.localToWorld(p.current.set(clicked.current.position.x, clicked.current.position.y, 1.85))
+      console.log(p)
+
     } else {
-      active.current = false
-      p.set(0, 0, 5.5)
-      q.identity()
+      setActive(false)
+      p.current.set(0, 0, 5.5)
+      console.log(p)
     }
   }
   useEffect(() => {
-    p.set(0, 0, 5.5)
-    q.identity()
+    p.current = new THREE.Vector3(0, 0, 5.5)
   }, [])
 
 
   useFrame((state, dt) => {
-    console.log(active.current)
-    easing.damp3(state.camera.position, p, 0.4, dt)
-    easing.dampQ(state.camera.quaternion, q, 0.4, dt)
+    if (p.current !== undefined) {
+      console.log(p.current)
+      easing.damp3(state.camera.position, p.current, 0.4, dt)
+    }
   })
   return (
     <>
@@ -48,7 +49,7 @@ const Experience = ({ groupRef, q = new THREE.Quaternion(), p = new THREE.Vector
           )
         })}
       </group>
-      {active.current ? <BoxUI cubes={cubes} setCubes={setCubes} clickBox={clicked.current} ></BoxUI> : ""}
+      {active ? <BoxUI cubes={cubes} setCubes={setCubes} clickBox={clicked.current} ></BoxUI> : ""}
 
     </>
   );

@@ -31,9 +31,7 @@ export default function BoxUI({ clickBox, startRotation, setColor, cubes, setCub
       console.log(cubes)
     }
   }
-  useEffect(() => {
-    console.log("holi")
-  }, [])
+
   return (
     <>
       <Html center position={[clickBox.position.x, clickBox.position.y - 1.5, clickBox.position.z]} >

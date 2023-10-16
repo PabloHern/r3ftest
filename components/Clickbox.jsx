@@ -21,21 +21,11 @@ export function Clickbox(props) {
   const clickBox = useRef()
   const [rotationAngle, setRotationAngle] = useState(0);
 
-  useEffect(() => {
-    setInitialCamera(camera.position)
-    startRotation(-1)
-  }, [])
   const startRotation = (dir) => {
     setRotationAngle((prevAngle) => prevAngle + (Math.PI / 2) * dir);
   };
 
   useFrame(() => {
-    // if (active && camera.position !== new THREE.Vector3(clickBox.current.position.x, clickBox.current.position.y, clickBox.current.position.z + 4)) {
-    //   camera.position.lerp(new THREE.Vector3(clickBox.current.position.x, clickBox.current.position.y, clickBox.current.position.z + 6), 0.03)
-    //   camera.updateProjectionMatrix()
-    //   props.controls.current.target = clickBox.current.position
-    // }
-
     if (clickBox.current.rotation.y !== rotationAngle) {
       clickBox.current.rotation.y += (rotationAngle - clickBox.current.rotation.y) * 0.1; // Smoothly rotate to the desired angle
     }
